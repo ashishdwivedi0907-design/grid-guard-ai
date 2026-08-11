@@ -199,7 +199,7 @@ def home():
     }
 @app.get("/dashboard")
 def dashboard():
-    return FileResponse("dashboard.html")
+    return FileResponse("index.html")
 
 
 @app.post("/predict")
