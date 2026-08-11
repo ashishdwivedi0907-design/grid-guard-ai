@@ -1,4 +1,4 @@
-
+from fastapi.responses import FileResponse
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
@@ -197,6 +197,9 @@ def home():
     return {
         "message": "GridGuard AI Twin API is running"
     }
+    @app.get("/dashboard")
+def dashboard():
+    return FileResponse("dashboard.html")
 
 
 @app.post("/predict")
