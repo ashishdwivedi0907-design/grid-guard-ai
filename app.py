@@ -200,6 +200,12 @@ def home():
 @app.get("/dashboard")
 def dashboard():
     return FileResponse("index.html")
+@app.get("/style.css")
+def style():
+    return FileResponse("style.css")
+@app.get("/script.js")
+def script():
+    return FileResponse("script.js")
 
 
 @app.post("/predict")
