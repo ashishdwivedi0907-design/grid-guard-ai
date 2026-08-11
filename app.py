@@ -197,7 +197,7 @@ def home():
     return {
         "message": "GridGuard AI Twin API is running"
     }
-   @app.get("/dashboard")
+@app.get("/dashboard")
 def dashboard():
     return FileResponse("dashboard.html")
 
