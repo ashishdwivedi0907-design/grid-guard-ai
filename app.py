@@ -29,6 +29,7 @@ MODEL_PATH = os.path.join(
 
 INDEX_PATH = os.path.join(
     BASE_DIR,
+    "templates",
     "index.html"
 )
 
