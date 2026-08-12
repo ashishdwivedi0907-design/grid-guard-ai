@@ -1,15 +1,20 @@
+// =========================================================
+// GRIDGUARD AI - DASHBOARD JAVASCRIPT
+// =========================================================
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    console.log("GridGuard AI started");
+    // -----------------------------------------------------
+    // PAGE NAVIGATION
+    // -----------------------------------------------------
 
-    const pages = document.querySelectorAll(".page");
     const navItems = document.querySelectorAll(".nav-item");
+    const pages = document.querySelectorAll(".page");
 
     const pageTitle = document.getElementById("pageTitle");
     const pageSubtitle = document.getElementById("pageSubtitle");
 
-
-    const pageInformation = {
+    const pageInfo = {
 
         transformers: {
             title: "Transformer Overview",
@@ -17,177 +22,257 @@ document.addEventListener("DOMContentLoaded", function () {
         },
 
         alerts: {
-            title: "Alerts",
-            subtitle: "Monitor abnormal transformer conditions"
+            title: "Active Alerts",
+            subtitle: "Abnormal conditions detected by GridGuard AI"
         },
 
         monitoring: {
             title: "Live Monitoring",
-            subtitle: "Real-time transformer sensor telemetry"
+            subtitle: "Real-time transformer telemetry"
         },
 
         maintenance: {
             title: "Maintenance",
-            subtitle: "Track inspections and maintenance activities"
+            subtitle: "Transformer maintenance and asset management"
         },
 
         insights: {
             title: "AI Insights",
-            subtitle: "AI-powered transformer health predictions"
+            subtitle: "Intelligent transformer health prediction"
         }
 
     };
 
 
-    // ==========================================
-    // CHANGE PAGE
-    // ==========================================
-
-    function openPage(pageId) {
-
-        console.log("Opening:", pageId);
-
-        const selectedPage =
-            document.getElementById(pageId);
-
-        if (!selectedPage) {
-            console.error("Page does not exist:", pageId);
-            return;
-        }
-
-
-        // Hide EVERY page
-        pages.forEach(function (page) {
-
-            page.classList.remove("active-page");
-
-            page.style.display = "none";
-
-        });
-
-
-        // Remove active from EVERY button
-        navItems.forEach(function (button) {
-
-            button.classList.remove("active");
-
-        });
-
-
-        // SHOW selected page
-        selectedPage.classList.add("active-page");
-
-        selectedPage.style.display = "block";
-
-
-        // Activate selected sidebar button
-        navItems.forEach(function (button) {
-
-            if (
-                button.getAttribute("data-target")
-                === pageId
-            ) {
-
-                button.classList.add("active");
-
-            }
-
-        });
-
-
-        // Change heading
-        if (pageInformation[pageId]) {
-
-            if (pageTitle) {
-
-                pageTitle.textContent =
-                    pageInformation[pageId].title;
-
-            }
-
-            if (pageSubtitle) {
-
-                pageSubtitle.textContent =
-                    pageInformation[pageId].subtitle;
-
-            }
-
-        }
-
-
-        window.scrollTo(0, 0);
-
-    }
-
-
-    // ==========================================
-    // SIDEBAR CLICK
-    // ==========================================
-
     navItems.forEach(function (button) {
 
-        button.addEventListener(
-            "click",
-            function (event) {
+        button.addEventListener("click", function () {
 
-                event.preventDefault();
-                event.stopPropagation();
+            const target = button.getAttribute("data-target");
 
-                const target =
-                    this.getAttribute("data-target");
+            if (!target) {
+                return;
+            }
 
-                console.log(
-                    "SIDEBAR CLICK:",
-                    target
-                );
 
-                openPage(target);
+            // Remove active class from all buttons
+
+            navItems.forEach(function (item) {
+                item.classList.remove("active");
+            });
+
+
+            // Add active class to clicked button
+
+            button.classList.add("active");
+
+
+            // Hide all pages
+
+            pages.forEach(function (page) {
+                page.classList.remove("active-page");
+            });
+
+
+            // Show selected page
+
+            const selectedPage = document.getElementById(target);
+
+            if (selectedPage) {
+                selectedPage.classList.add("active-page");
+            }
+
+
+            // Update title
+
+            if (pageInfo[target]) {
+
+                if (pageTitle) {
+                    pageTitle.textContent = pageInfo[target].title;
+                }
+
+                if (pageSubtitle) {
+                    pageSubtitle.textContent = pageInfo[target].subtitle;
+                }
 
             }
-        );
+
+        });
 
     });
 
 
-    // ==========================================
+    // -----------------------------------------------------
     // REFRESH BUTTON
-    // ==========================================
+    // -----------------------------------------------------
 
-    const refreshButton =
-        document.getElementById("refreshButton");
-
+    const refreshButton = document.getElementById("refreshButton");
 
     if (refreshButton) {
 
-        refreshButton.addEventListener(
-            "click",
-            function () {
+        refreshButton.addEventListener("click", function () {
 
-                console.log("Dashboard refreshed");
+            refreshButton.textContent = "↻ Refreshing...";
 
-                updateSensors();
+            setTimeout(function () {
 
-                const original =
-                    refreshButton.textContent;
+                refreshButton.textContent = "↻ Refresh";
 
-                refreshButton.textContent =
-                    "✓ Updated";
+                updateMonitoringValues();
 
-                setTimeout(function () {
+            }, 1000);
 
-                    refreshButton.textContent =
-                        original;
-
-                }, 1500);
-
-            }
-        );
+        });
 
     }
 
 
-    // ==========================================
-    // SENSOR VALUES
-    // ==========================================
+    // -----------------------------------------------------
+    // TRANSFORMER MARKERS
+    // -----------------------------------------------------
 
-    function updateSensors() {
+    const transformerMarkers =
+        document.querySelectorAll(".transformer-marker");
+
+
+    transformerMarkers.forEach(function (marker) {
+
+        marker.addEventListener("click", function () {
+
+            const transformer =
+                marker.getAttribute("data-transformer");
+
+            if (transformer) {
+
+                alert(
+                    "GridGuard AI\n\n" +
+                    transformer +
+                    "\n\nTransformer selected.\n" +
+                    "Live health monitoring is active."
+                );
+
+            }
+
+        });
+
+    });
+
+
+    // -----------------------------------------------------
+    // LIVE MONITORING VALUES
+    // -----------------------------------------------------
+
+    function updateMonitoringValues() {
+
+        const temperature =
+            document.getElementById("temperature");
+
+        const voltage =
+            document.getElementById("voltage");
+
+        const current =
+            document.getElementById("current");
+
+        const load =
+            document.getElementById("load");
+
+        const vibration =
+            document.getElementById("vibration");
+
+        const oilTemperature =
+            document.getElementById("oilTemperature");
+
+
+        if (temperature) {
+
+            const temp =
+                Math.floor(68 + Math.random() * 8);
+
+            temperature.textContent =
+                temp + "°C";
+
+        }
+
+
+        if (voltage) {
+
+            const volt =
+                (11.0 + Math.random() * 0.5)
+                .toFixed(1);
+
+            voltage.textContent =
+                volt + " kV";
+
+        }
+
+
+        if (current) {
+
+            const amp =
+                Math.floor(30 + Math.random() * 10);
+
+            current.textContent =
+                amp + " A";
+
+        }
+
+
+        if (load) {
+
+            const loadValue =
+                Math.floor(58 + Math.random() * 10);
+
+            load.textContent =
+                loadValue + "%";
+
+        }
+
+
+        if (vibration) {
+
+            const vibrationValue =
+                (2.0 + Math.random() * 0.8)
+                .toFixed(1);
+
+            vibration.textContent =
+                vibrationValue;
+
+        }
+
+
+        if (oilTemperature) {
+
+            const oil =
+                Math.floor(64 + Math.random() * 7);
+
+            oilTemperature.textContent =
+                oil + "°C";
+
+        }
+
+    }
+
+
+    // -----------------------------------------------------
+    // AUTO UPDATE LIVE MONITORING
+    // -----------------------------------------------------
+
+    setInterval(function () {
+
+        updateMonitoringValues();
+
+    }, 5000);
+
+
+    // -----------------------------------------------------
+    // INITIAL UPDATE
+    // -----------------------------------------------------
+
+    updateMonitoringValues();
+
+
+    console.log(
+        "GridGuard AI Dashboard loaded successfully."
+    );
+
+});
