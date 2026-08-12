@@ -1,930 +1,332 @@
 /* =========================================================
-   GRIDGUARD AI - FRONTEND
-   ========================================================= */
-
-
-/*
-   IMPORTANT:
-
-   When we connect this dashboard to your Render FastAPI backend,
-   put your backend URL here.
-
-   Example:
-
-   const API_BASE_URL =
-      "https://grid-guard-ai.onrender.com"
-
-   DO NOT put a slash at the end.
-*/
-
-const API_BASE_URL = "";
-
-
-/*
-   API endpoint used for prediction.
-
-   If your FastAPI endpoint is /predict,
-   this will automatically become:
-
-   https://your-gridguard-api.onrender.com/predict
-*/
-
-const PREDICT_ENDPOINT = "/predict";
+   GRIDGUARD AI
+   STEP 3 — TRANSFORMER MANAGEMENT
+========================================================= */
 
 
 /* =========================================================
-   DEMO DATA
-   ========================================================= */
+   TRANSFORMER DATA
+========================================================= */
 
-const demoData = {
+const transformers = [
 
-    transformer_id: "TR-001",
+    {
+        id: "TR-001",
+        name: "Main Distribution",
+        location: "Central Grid",
+        health: 91,
+        status: "normal",
+        load: 64,
+        confidence: 96,
 
-    temperature: 78.64,
+        temperature: 68,
+        oilLevel: 87,
+        voltage: 11.1,
+        current: 38,
+        vibration: 2.1,
+        humidity: 54,
+        oilTemp: 71,
 
-    voltage: 11.0,
+        recommendation:
+            "Transformer is operating normally. Continue standard monitoring."
+    },
 
-    current: 42.5,
+    {
+        id: "TR-002",
+        name: "Industrial Zone",
+        location: "Industrial Sector",
+        health: 76,
+        status: "warning",
+        load: 81,
+        confidence: 91,
 
-    load: 87.74,
+        temperature: 76,
+        oilLevel: 73,
+        voltage: 10.8,
+        current: 44,
+        vibration: 3.7,
+        humidity: 62,
+        oilTemp: 79,
 
-    vibration: 4.85,
+        recommendation:
+            "Load and temperature are elevated. Schedule a routine inspection and monitor oil temperature closely."
+    },
 
-    humidity: 65,
+    {
+        id: "TR-003",
+        name: "Residential Sector",
+        location: "North Grid",
+        health: 42,
+        status: "critical",
+        load: 92,
+        confidence: 94,
 
-    oil_temperature: 69.9,
+        temperature: 82,
+        oilLevel: 61,
+        voltage: 10.9,
+        current: 45,
+        vibration: 6.5,
+        humidity: 75,
+        oilTemp: 88,
 
-    health_score: 74.5,
+        recommendation:
+            "Critical operating conditions detected. Immediate inspection is recommended."
+    },
 
-    risk_level: "WARNING",
+    {
+        id: "TR-004",
+        name: "Commercial Hub",
+        location: "Business District",
+        health: 88,
+        status: "normal",
+        load: 59,
+        confidence: 95,
 
-    ai_confidence: 96,
+        temperature: 64,
+        oilLevel: 91,
+        voltage: 11.2,
+        current: 35,
+        vibration: 1.8,
+        humidity: 48,
+        oilTemp: 68,
 
-    recommendation:
-        "Monitor transformer temperature and load. Schedule preventive inspection if the values continue increasing."
+        recommendation:
+            "Transformer health is stable. Continue normal monitoring."
+    },
 
-};
+    {
+        id: "TR-005",
+        name: "East Distribution",
+        location: "East Grid",
+        health: 72,
+        status: "warning",
+        load: 78,
+        confidence: 89,
+
+        temperature: 74,
+        oilLevel: 76,
+        voltage: 11.0,
+        current: 41,
+        vibration: 3.2,
+        humidity: 59,
+        oilTemp: 77,
+
+        recommendation:
+            "Moderate risk detected. Monitor temperature and load during peak demand."
+    }
+
+];
 
 
 /* =========================================================
    DOM ELEMENTS
-   ========================================================= */
+========================================================= */
 
-const elements = {
+const pages = document.querySelectorAll(".page");
 
-    transformerName:
-        document.getElementById("transformerName"),
+const navItems = document.querySelectorAll(".nav-item");
 
-    healthScore:
-        document.getElementById("healthScore"),
+const transformerTableBody =
+    document.getElementById("transformerTableBody");
 
-    riskBadge:
-        document.getElementById("riskBadge"),
+const transformerSearch =
+    document.getElementById("transformerSearch");
 
-    riskLevel:
-        document.getElementById("riskLevel"),
+const statusFilter =
+    document.getElementById("statusFilter");
 
-    aiConfidence:
-        document.getElementById("aiConfidence"),
-
-    healthMessage:
-        document.getElementById("healthMessage"),
-
-    temperature:
-        document.getElementById("temperature"),
-
-    voltage:
-        document.getElementById("voltage"),
-
-    current:
-        document.getElementById("current"),
-
-    load:
-        document.getElementById("load"),
-
-    vibration:
-        document.getElementById("vibration"),
-
-    humidity:
-        document.getElementById("humidity"),
-
-    oilTemperature:
-        document.getElementById("oilTemperature"),
-
-    temperatureBar:
-        document.getElementById("temperatureBar"),
-
-    loadBar:
-        document.getElementById("loadBar"),
-
-    vibrationBar:
-        document.getElementById("vibrationBar"),
-
-    oilBar:
-        document.getElementById("oilBar"),
-
-    connectionDot:
-        document.getElementById("connectionDot"),
-
-    connectionText:
-        document.getElementById("connectionText"),
-
-    lastUpdated:
-        document.getElementById("lastUpdated"),
-
-    alertsContainer:
-        document.getElementById("alertsContainer"),
-
-    alertCount:
-        document.getElementById("alertCount"),
-
-    recommendationTitle:
-        document.getElementById("recommendationTitle"),
-
-    recommendationText:
-        document.getElementById("recommendationText"),
-
-    refreshBtn:
-        document.getElementById("refreshBtn"),
-
-    transformerSelect:
-        document.getElementById("transformerSelect")
-
-};
+const transformerSelect =
+    document.getElementById("transformerSelect");
 
 
 /* =========================================================
-   HELPER FUNCTIONS
-   ========================================================= */
+   PAGE NAVIGATION
+========================================================= */
+
+function showPage(pageName) {
+
+    pages.forEach(page => {
+        page.classList.remove("active-page");
+    });
 
 
-/*
-   Convert different possible backend property names
-   into one consistent value.
-*/
+    const targetPage =
+        document.getElementById(pageName + "Page");
 
-function getValue(data, possibleNames, defaultValue = 0) {
 
-    for (const name of possibleNames) {
+    if (targetPage) {
 
-        if (
-            data[name] !== undefined &&
-            data[name] !== null &&
-            data[name] !== ""
-        ) {
+        targetPage.classList.add("active-page");
 
-            return Number(data[name]);
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    navItems.forEach(item => {
+
+        item.classList.remove("active");
+
+        if (item.dataset.page === pageName) {
+            item.classList.add("active");
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   SIDEBAR BUTTONS
+========================================================= */
+
+navItems.forEach(item => {
+
+    item.addEventListener("click", () => {
+
+        const page =
+            item.dataset.page;
+
+        if (page === "transformers") {
+
+            showPage("transformers");
+
+            renderTransformers();
+
+        } else {
+
+            showPage(page);
 
         }
 
-    }
+    });
 
-    return defaultValue;
-}
-
-
-/*
-   Get text values from backend.
-*/
-
-function getText(data, possibleNames, defaultValue = "") {
-
-    for (const name of possibleNames) {
-
-        if (
-            data[name] !== undefined &&
-            data[name] !== null &&
-            data[name] !== ""
-        ) {
-
-            return String(data[name]);
-
-        }
-
-    }
-
-    return defaultValue;
-}
+});
 
 
-/*
-   Safely limit a number between two values.
-*/
+/* =========================================================
+   FIND TRANSFORMER
+========================================================= */
 
-function clamp(value, min, max) {
+function getTransformer(id) {
 
-    return Math.min(
-        Math.max(value, min),
-        max
+    return transformers.find(
+        transformer =>
+            transformer.id === id
     );
 
 }
 
 
-/*
-   Format numbers.
-*/
-
-function formatNumber(value, decimals = 1) {
-
-    if (value === null || value === undefined) {
-        return "--";
-    }
-
-    const number = Number(value);
-
-    if (Number.isNaN(number)) {
-        return "--";
-    }
-
-    return number.toFixed(decimals);
-
-}
-
-
 /* =========================================================
-   CONNECTION STATUS
-   ========================================================= */
+   STATUS TEXT
+========================================================= */
 
-function setConnectionStatus(online) {
+function getStatusText(status) {
 
-    if (online) {
-
-        elements.connectionDot.classList.remove("offline");
-
-        elements.connectionDot.classList.add("online");
-
-        elements.connectionText.textContent =
-            "AI API Connected";
-
-    } else {
-
-        elements.connectionDot.classList.remove("online");
-
-        elements.connectionDot.classList.add("offline");
-
-        elements.connectionText.textContent =
-            "Demo Mode";
-
+    if (status === "normal") {
+        return "HEALTHY";
     }
 
-}
-
-
-/* =========================================================
-   RISK
-   ========================================================= */
-
-function normalizeRisk(risk) {
-
-    if (!risk) {
-        return "NORMAL";
-    }
-
-    const value =
-        String(risk).toUpperCase();
-
-    if (
-        value.includes("CRITICAL") ||
-        value.includes("HIGH") ||
-        value.includes("DANGER")
-    ) {
-
-        return "CRITICAL";
-
-    }
-
-    if (
-        value.includes("WARNING") ||
-        value.includes("MEDIUM")
-    ) {
-
-        return "WARNING";
-
-    }
-
-    return "NORMAL";
-
-}
-
-
-function updateRisk(risk) {
-
-    const normalizedRisk =
-        normalizeRisk(risk);
-
-    elements.riskBadge.textContent =
-        normalizedRisk;
-
-    elements.riskLevel.textContent =
-        normalizedRisk;
-
-    elements.riskBadge.className =
-        "risk-badge";
-
-    elements.riskBadge.classList.add(
-        normalizedRisk.toLowerCase()
-    );
-
-    elements.riskLevel.style.color =
-        normalizedRisk === "CRITICAL"
-            ? "#dc2626"
-            : normalizedRisk === "WARNING"
-                ? "#d97706"
-                : "#16a34a";
-
-}
-
-
-/* =========================================================
-   PARAMETER STATUS
-   ========================================================= */
-
-function getParameterStatus(value, warning, critical) {
-
-    if (value >= critical) {
-        return "CRITICAL";
-    }
-
-    if (value >= warning) {
+    if (status === "warning") {
         return "WARNING";
     }
 
-    return "NORMAL";
-
-}
-
-
-function updateParameterStatus(
-    elementId,
-    value,
-    warning,
-    critical
-) {
-
-    const element =
-        document.getElementById(elementId);
-
-    if (!element) {
-        return;
+    if (status === "critical") {
+        return "CRITICAL";
     }
 
-    const status =
-        getParameterStatus(
-            value,
-            warning,
-            critical
-        );
-
-    element.textContent =
-        status;
-
-    element.className =
-        "parameter-status " +
-        status.toLowerCase();
+    return "UNKNOWN";
 
 }
 
 
 /* =========================================================
-   UPDATE PROGRESS BARS
-   ========================================================= */
+   RENDER TRANSFORMER TABLE
+========================================================= */
 
-function updateBar(
-    element,
-    value,
-    maximum
-) {
+function renderTransformers() {
 
-    if (!element) {
+    if (!transformerTableBody) {
         return;
     }
 
-    const percentage =
-        clamp(
-            (value / maximum) * 100,
-            0,
-            100
-        );
-
-    element.style.width =
-        percentage + "%";
-
-}
-
-
-/* =========================================================
-   UPDATE DASHBOARD
-   ========================================================= */
-
-function updateDashboard(rawData) {
-
-    /*
-       Some FastAPI responses return the actual result
-       inside "result", "prediction", or "data".
-
-       This makes the dashboard more tolerant.
-    */
-
-    const data =
-        rawData.result ||
-        rawData.prediction ||
-        rawData.data ||
-        rawData;
-
-
-    /* -------------------------
-       Transformer
-    ------------------------- */
-
-    const transformerId =
-        getText(
-            data,
-            [
-                "transformer_id",
-                "transformerId",
-                "transformer",
-                "id"
-            ],
-            "TR-001"
-        );
-
-    elements.transformerName.textContent =
-        transformerId;
-
-
-    /* -------------------------
-       Sensor values
-    ------------------------- */
-
-    const temperature =
-        getValue(
-            data,
-            [
-                "temperature",
-                "temperature_c",
-                "temperature_C"
-            ]
-        );
-
-
-    const voltage =
-        getValue(
-            data,
-            [
-                "voltage",
-                "voltage_kv",
-                "voltage_kV"
-            ]
-        );
-
-
-    const current =
-        getValue(
-            data,
-            [
-                "current",
-                "current_a",
-                "current_A"
-            ]
-        );
-
-
-    const load =
-        getValue(
-            data,
-            [
-                "load",
-                "load_percent",
-                "load_percentage"
-            ]
-        );
-
-
-    const vibration =
-        getValue(
-            data,
-            [
-                "vibration",
-                "vibration_mm_s",
-                "vibration_mms"
-            ]
-        );
-
-
-    const humidity =
-        getValue(
-            data,
-            [
-                "humidity",
-                "humidity_percent"
-            ]
-        );
-
-
-    const oilTemperature =
-        getValue(
-            data,
-            [
-                "oil_temperature",
-                "oilTemperature",
-                "oil_temp",
-                "oil_temperature_c"
-            ]
-        );
 
+    const searchValue =
+        transformerSearch
+            ? transformerSearch.value
+                .toLowerCase()
+                .trim()
+            : "";
 
-    /* -------------------------
-       Health
-    ------------------------- */
 
-    const healthScore =
-        getValue(
-            data,
-            [
-                "health_score",
-                "healthScore",
-                "health"
-            ],
-            0
-        );
+    const selectedStatus =
+        statusFilter
+            ? statusFilter.value
+            : "all";
 
 
-    const confidence =
-        getValue(
-            data,
-            [
-                "ai_confidence",
-                "confidence",
-                "aiConfidence",
-                "prediction_confidence"
-            ],
-            0
-        );
+    const filtered =
+        transformers.filter(transformer => {
 
+            const matchesSearch =
 
-    const risk =
-        getText(
-            data,
-            [
-                "risk_level",
-                "riskLevel",
-                "risk",
-                "prediction"
-            ],
-            "NORMAL"
-        );
+                transformer.id
+                    .toLowerCase()
+                    .includes(searchValue)
 
+                ||
 
-    /* -------------------------
-       Put values into UI
-    ------------------------- */
+                transformer.name
+                    .toLowerCase()
+                    .includes(searchValue)
 
-    elements.temperature.textContent =
-        formatNumber(temperature, 2);
+                ||
 
-    elements.voltage.textContent =
-        formatNumber(voltage, 2);
-
-    elements.current.textContent =
-        formatNumber(current, 2);
+                transformer.location
+                    .toLowerCase()
+                    .includes(searchValue);
 
-    elements.load.textContent =
-        formatNumber(load, 2);
-
-    elements.vibration.textContent =
-        formatNumber(vibration, 2);
-
-    elements.humidity.textContent =
-        formatNumber(humidity, 1);
-
-    elements.oilTemperature.textContent =
-        formatNumber(oilTemperature, 1);
-
-    elements.healthScore.textContent =
-        formatNumber(healthScore, 1);
-
-    elements.aiConfidence.textContent =
-        formatNumber(confidence, 1) + "%";
-
-
-    /* -------------------------
-       Risk
-    ------------------------- */
-
-    updateRisk(risk);
-
-
-    /* -------------------------
-       Health message
-    ------------------------- */
-
-    const normalizedRisk =
-        normalizeRisk(risk);
-
-    if (normalizedRisk === "CRITICAL") {
-
-        elements.healthMessage.textContent =
-            "Critical conditions detected. Immediate inspection is recommended.";
-
-    } else if (normalizedRisk === "WARNING") {
-
-        elements.healthMessage.textContent =
-            "Some transformer parameters require monitoring and preventive attention.";
-
-    } else {
-
-        elements.healthMessage.textContent =
-            "Transformer parameters are within the normal operating range.";
-
-    }
-
-
-    /* -------------------------
-       Progress bars
-    ------------------------- */
-
-    updateBar(
-        elements.temperatureBar,
-        temperature,
-        100
-    );
-
-    updateBar(
-        elements.loadBar,
-        load,
-        100
-    );
-
-    updateBar(
-        elements.vibrationBar,
-        vibration,
-        10
-    );
 
-    updateBar(
-        elements.oilBar,
-        oilTemperature,
-        100
-    );
+            const matchesStatus =
 
+                selectedStatus === "all"
 
-    /* -------------------------
-       Parameter statuses
-    ------------------------- */
+                ||
 
-    updateParameterStatus(
-        "temperatureStatus",
-        temperature,
-        70,
-        80
-    );
+                transformer.status ===
+                selectedStatus;
 
-    updateParameterStatus(
-        "loadStatus",
-        load,
-        75,
-        90
-    );
 
-    updateParameterStatus(
-        "vibrationStatus",
-        vibration,
-        4,
-        6
-    );
+            return matchesSearch &&
+                   matchesStatus;
 
-    updateParameterStatus(
-        "oilStatus",
-        oilTemperature,
-        65,
-        80
-    );
-
-
-    /* -------------------------
-       Recommendation
-    ------------------------- */
-
-    const recommendation =
-        getText(
-            data,
-            [
-                "recommendation",
-                "recommendations",
-                "action"
-            ],
-            ""
-        );
-
-    updateRecommendation(
-        normalizedRisk,
-        recommendation
-    );
-
-
-    /* -------------------------
-       Alerts
-    ------------------------- */
-
-    generateAlerts(
-        temperature,
-        load,
-        vibration,
-        oilTemperature
-    );
-
-
-    /* -------------------------
-       Timestamp
-    ------------------------- */
-
-    elements.lastUpdated.textContent =
-        new Date().toLocaleTimeString();
-
-}
-
-
-/* =========================================================
-   RECOMMENDATION
-   ========================================================= */
-
-function updateRecommendation(
-    risk,
-    backendRecommendation
-) {
-
-    if (backendRecommendation) {
-
-        elements.recommendationText.textContent =
-            backendRecommendation;
-
-    } else if (risk === "CRITICAL") {
-
-        elements.recommendationTitle.textContent =
-            "Immediate inspection required";
-
-        elements.recommendationText.textContent =
-            "Critical transformer conditions detected. Inspect the transformer and investigate abnormal sensor readings.";
-
-        return;
-
-    } else if (risk === "WARNING") {
-
-        elements.recommendationTitle.textContent =
-            "Preventive monitoring recommended";
-
-        elements.recommendationText.textContent =
-            "Monitor temperature, load and vibration closely and schedule preventive maintenance if values continue increasing.";
-
-        return;
-
-    } else {
-
-        elements.recommendationTitle.textContent =
-            "Transformer operating normally";
-
-        elements.recommendationText.textContent =
-            "Current sensor readings indicate stable transformer operation.";
-
-        return;
-
-    }
-
-    elements.recommendationTitle.textContent =
-        "AI Recommendation";
-
-}
-
-
-/* =========================================================
-   ALERT GENERATION
-   ========================================================= */
-
-function generateAlerts(
-    temperature,
-    load,
-    vibration,
-    oilTemperature
-) {
-
-    const alerts = [];
-
-
-    if (temperature >= 80) {
-
-        alerts.push({
-            type: "critical",
-            title: "High Temperature",
-            message:
-                `Temperature reached ${formatNumber(temperature, 1)} °C.`
         });
 
-    } else if (temperature >= 70) {
 
-        alerts.push({
-            type: "warning",
-            title: "Temperature Warning",
-            message:
-                `Temperature is ${formatNumber(temperature, 1)} °C.`
-        });
-
-    }
+    transformerTableBody.innerHTML = "";
 
 
-    if (load >= 90) {
+    if (filtered.length === 0) {
 
-        alerts.push({
-            type: "critical",
-            title: "High Load",
-            message:
-                `Transformer load reached ${formatNumber(load, 1)}%.`
-        });
+        transformerTableBody.innerHTML = `
 
-    } else if (load >= 75) {
+            <tr>
 
-        alerts.push({
-            type: "warning",
-            title: "Load Warning",
-            message:
-                `Transformer load is ${formatNumber(load, 1)}%.`
-        });
+                <td
+                    colspan="6"
+                    style="
+                        text-align:center;
+                        padding:35px;
+                        color:#94a3b8;
+                    "
+                >
+                    No transformers found.
+                </td>
 
-    }
-
-
-    if (vibration >= 6) {
-
-        alerts.push({
-            type: "critical",
-            title: "High Vibration",
-            message:
-                `Vibration reached ${formatNumber(vibration, 2)} mm/s.`
-        });
-
-    } else if (vibration >= 4) {
-
-        alerts.push({
-            type: "warning",
-            title: "Vibration Warning",
-            message:
-                `Vibration is ${formatNumber(vibration, 2)} mm/s.`
-        });
-
-    }
-
-
-    if (oilTemperature >= 80) {
-
-        alerts.push({
-            type: "critical",
-            title: "High Oil Temperature",
-            message:
-                `Oil temperature reached ${formatNumber(oilTemperature, 1)} °C.`
-        });
-
-    } else if (oilTemperature >= 65) {
-
-        alerts.push({
-            type: "warning",
-            title: "Oil Temperature Warning",
-            message:
-                `Oil temperature is ${formatNumber(oilTemperature, 1)} °C.`
-        });
-
-    }
-
-
-    renderAlerts(alerts);
-
-}
-
-
-/* =========================================================
-   RENDER ALERTS
-   ========================================================= */
-
-function renderAlerts(alerts) {
-
-    elements.alertCount.textContent =
-        alerts.length;
-
-
-    if (alerts.length === 0) {
-
-        elements.alertsContainer.innerHTML = `
-
-            <div class="empty-state">
-
-                <div>✓</div>
-
-                <p>No alerts detected</p>
-
-                <small>
-                    System is operating normally.
-                </small>
-
-            </div>
+            </tr>
 
         `;
 
@@ -932,214 +334,634 @@ function renderAlerts(alerts) {
     }
 
 
-    elements.alertsContainer.innerHTML =
-        alerts.map(alert => `
+    filtered.forEach(transformer => {
 
-            <div class="alert-item ${alert.type}">
+        const row =
+            document.createElement("tr");
 
-                <h4>
-                    ${alert.title}
-                </h4>
 
-                <p>
-                    ${alert.message}
-                </p>
+        row.innerHTML = `
 
-            </div>
+            <td>
 
-        `).join("");
+                <div class="transformer-id">
+                    ${transformer.id}
+                </div>
+
+                <div class="transformer-name">
+                    ${transformer.name}
+                </div>
+
+            </td>
+
+
+            <td>
+                ${transformer.location}
+            </td>
+
+
+            <td>
+
+                <div class="health-mini">
+
+                    <span class="health-number">
+                        ${transformer.health}
+                    </span>
+
+                    <div class="mini-bar">
+
+                        <span
+                            style="
+                                width:${transformer.health}%;
+                                background:${getStatusColor(transformer.status)};
+                            "
+                        ></span>
+
+                    </div>
+
+                </div>
+
+            </td>
+
+
+            <td>
+                ${transformer.load}%
+            </td>
+
+
+            <td>
+
+                <span
+                    class="status-pill ${transformer.status}"
+                >
+                    ${getStatusText(transformer.status)}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <button
+                    class="view-button"
+                    data-id="${transformer.id}"
+                >
+                    View Details
+                </button>
+
+            </td>
+
+        `;
+
+
+        transformerTableBody.appendChild(row);
+
+    });
+
+
+    document
+        .querySelectorAll(".view-button")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    openTransformerDetail(
+                        button.dataset.id
+                    );
+
+                }
+            );
+
+        });
 
 }
 
 
 /* =========================================================
-   API CALL
-   ========================================================= */
+   STATUS COLOR
+========================================================= */
 
-async function callAPI() {
+function getStatusColor(status) {
 
-    /*
-       If API_BASE_URL is empty,
-       use demo mode.
+    if (status === "normal") {
+        return "#16a34a";
+    }
 
-       This means the dashboard will still work
-       when you open index.html locally.
-    */
+    if (status === "warning") {
+        return "#d97706";
+    }
 
-    if (!API_BASE_URL) {
+    return "#dc2626";
 
-        console.log(
-            "GridGuard running in demo mode."
-        );
+}
 
-        setConnectionStatus(false);
 
-        updateDashboard(demoData);
+/* =========================================================
+   SEARCH
+========================================================= */
 
+if (transformerSearch) {
+
+    transformerSearch.addEventListener(
+        "input",
+        renderTransformers
+    );
+
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+if (statusFilter) {
+
+    statusFilter.addEventListener(
+        "change",
+        renderTransformers
+    );
+
+}
+
+
+/* =========================================================
+   OPEN TRANSFORMER DETAIL
+========================================================= */
+
+function openTransformerDetail(id) {
+
+    const transformer =
+        getTransformer(id);
+
+
+    if (!transformer) {
         return;
-
     }
 
 
-    try {
-
-        setConnectionStatus(false);
-
-        elements.connectionText.textContent =
-            "Connecting...";
+    document.getElementById(
+        "detailTransformerName"
+    ).textContent =
+        transformer.id;
 
 
-        /*
-           Data sent to your FastAPI AI model.
-
-           These are the same type of transformer
-           parameters used by the GridGuard AI model.
-        */
-
-        const payload = {
-
-            temperature: 78.64,
-
-            voltage: 11.0,
-
-            current: 42.5,
-
-            load: 87.74,
-
-            vibration: 4.85,
-
-            humidity: 65,
-
-            oil_temperature: 69.9
-
-        };
+    document.getElementById(
+        "detailTransformerLocation"
+    ).textContent =
+        transformer.name +
+        " • " +
+        transformer.location;
 
 
-        const response =
-            await fetch(
-                API_BASE_URL + PREDICT_ENDPOINT,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify(payload)
-                }
-            );
+    const detailStatus =
+        document.getElementById(
+            "detailStatus"
+        );
 
 
-        if (!response.ok) {
+    detailStatus.textContent =
+        getStatusText(
+            transformer.status
+        );
 
-            throw new Error(
-                `API returned ${response.status}`
+
+    detailStatus.className =
+        "detail-status " +
+        transformer.status;
+
+
+    document.getElementById(
+        "detailHealthScore"
+    ).textContent =
+        transformer.health;
+
+
+    document.getElementById(
+        "detailId"
+    ).textContent =
+        transformer.id;
+
+
+    document.getElementById(
+        "detailConfidence"
+    ).textContent =
+        transformer.confidence + "%";
+
+
+    document.getElementById(
+        "detailRecommendation"
+    ).textContent =
+        transformer.recommendation;
+
+
+    renderDetailSensors(transformer);
+
+
+    showPage("transformerDetail");
+
+}
+
+
+/* =========================================================
+   DETAIL SENSOR CARDS
+========================================================= */
+
+function renderDetailSensors(transformer) {
+
+    const container =
+        document.getElementById(
+            "detailSensorGrid"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const sensors = [
+
+        {
+            name: "Temperature",
+            value: transformer.temperature,
+            unit: "°C"
+        },
+
+        {
+            name: "Oil Level",
+            value: transformer.oilLevel,
+            unit: "%"
+        },
+
+        {
+            name: "Voltage",
+            value: transformer.voltage,
+            unit: "kV"
+        },
+
+        {
+            name: "Current",
+            value: transformer.current,
+            unit: "A"
+        },
+
+        {
+            name: "Load",
+            value: transformer.load,
+            unit: "%"
+        },
+
+        {
+            name: "Vibration",
+            value: transformer.vibration,
+            unit: "mm/s"
+        },
+
+        {
+            name: "Humidity",
+            value: transformer.humidity,
+            unit: "%"
+        },
+
+        {
+            name: "Oil Temperature",
+            value: transformer.oilTemp,
+            unit: "°C"
+        }
+
+    ];
+
+
+    sensors.forEach(sensor => {
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "detail-sensor";
+
+
+        card.innerHTML = `
+
+            <span>
+                ${sensor.name}
+            </span>
+
+            <strong>
+                ${sensor.value}
+            </strong>
+
+            <small>
+                ${sensor.unit}
+            </small>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+const backButton =
+    document.getElementById(
+        "backToTransformers"
+    );
+
+
+if (backButton) {
+
+    backButton.addEventListener(
+        "click",
+        () => {
+
+            showPage("transformers");
+
+            renderTransformers();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   TRANSFORMER SELECTOR
+========================================================= */
+
+if (transformerSelect) {
+
+    transformerSelect.addEventListener(
+        "change",
+        () => {
+
+            updateDashboard(
+                transformerSelect.value
             );
 
         }
+    );
+
+}
 
 
-        const data =
-            await response.json();
+/* =========================================================
+   UPDATE DASHBOARD
+========================================================= */
+
+function updateDashboard(id) {
+
+    const transformer =
+        getTransformer(id);
 
 
-        console.log(
-            "GridGuard API response:",
-            data
-        );
-
-
-        setConnectionStatus(true);
-
-        updateDashboard(data);
-
-
-    } catch (error) {
-
-        console.error(
-            "GridGuard API error:",
-            error
-        );
-
-
-        /*
-           Keep dashboard functional even
-           when backend is temporarily unavailable.
-        */
-
-        setConnectionStatus(false);
-
-        updateDashboard(demoData);
-
+    if (!transformer) {
+        return;
     }
+
+
+    document.getElementById(
+        "transformerName"
+    ).textContent =
+        transformer.id +
+        " — " +
+        transformer.name;
+
+
+    document.getElementById(
+        "healthScore"
+    ).textContent =
+        transformer.health;
+
+
+    document.getElementById(
+        "aiConfidence"
+    ).textContent =
+        transformer.confidence + "%";
+
+
+    document.getElementById(
+        "healthMessage"
+    ).textContent =
+        transformer.recommendation;
+
+
+    document.getElementById(
+        "recommendation"
+    ).textContent =
+        transformer.recommendation;
+
+
+    document.getElementById(
+        "temperature"
+    ).textContent =
+        transformer.temperature;
+
+
+    document.getElementById(
+        "oilLevel"
+    ).textContent =
+        transformer.oilLevel;
+
+
+    document.getElementById(
+        "voltage"
+    ).textContent =
+        transformer.voltage;
+
+
+    document.getElementById(
+        "current"
+    ).textContent =
+        transformer.current;
+
+
+    document.getElementById(
+        "load"
+    ).textContent =
+        transformer.load;
+
+
+    document.getElementById(
+        "vibration"
+    ).textContent =
+        transformer.vibration;
+
+
+    document.getElementById(
+        "humidity"
+    ).textContent =
+        transformer.humidity;
+
+
+    document.getElementById(
+        "oilTemp"
+    ).textContent =
+        transformer.oilTemp;
+
+
+    const badge =
+        document.getElementById(
+            "riskBadge"
+        );
+
+
+    badge.textContent =
+        getStatusText(
+            transformer.status
+        );
+
+
+    badge.className =
+        "risk-badge " +
+        transformer.status;
+
+
+    updateProgressBars(transformer);
+
+
+    document.getElementById(
+        "lastUpdated"
+    ).textContent =
+        new Date().toLocaleTimeString(
+            [],
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+}
+
+
+/* =========================================================
+   PROGRESS BARS
+========================================================= */
+
+function updateProgressBars(transformer) {
+
+    const progressBars =
+        document.querySelectorAll(
+            ".sensor-card .progress-fill"
+        );
+
+
+    if (progressBars.length < 8) {
+        return;
+    }
+
+
+    const values = [
+
+        transformer.temperature,
+
+        transformer.oilLevel,
+
+        (transformer.voltage / 15) * 100,
+
+        (transformer.current / 70) * 100,
+
+        transformer.load,
+
+        (transformer.vibration / 8) * 100,
+
+        transformer.humidity,
+
+        transformer.oilTemp
+
+    ];
+
+
+    progressBars.forEach(
+        (bar, index) => {
+
+            const value =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        values[index]
+                    )
+                );
+
+
+            bar.style.width =
+                value + "%";
+
+        }
+    );
 
 }
 
 
 /* =========================================================
    REFRESH
-   ========================================================= */
+========================================================= */
 
-elements.refreshBtn.addEventListener(
-    "click",
-    () => {
-
-        elements.refreshBtn.textContent =
-            "↻ Loading...";
-
-        callAPI().finally(() => {
-
-            elements.refreshBtn.textContent =
-                "↻ Refresh";
-
-        });
-
-    }
-);
+const refreshButton =
+    document.getElementById(
+        "refreshBtn"
+    );
 
 
-/* =========================================================
-   TRANSFORMER SELECTION
-   ========================================================= */
+if (refreshButton) {
 
-elements.transformerSelect.addEventListener(
-    "change",
-    () => {
+    refreshButton.addEventListener(
+        "click",
+        () => {
 
-        const selected =
-            elements.transformerSelect.value;
+            const current =
+                transformerSelect
+                    ? transformerSelect.value
+                    : "TR-001";
 
-        console.log(
-            "Selected transformer:",
-            selected
-        );
 
-        /*
-           At the moment the AI API uses the same
-           demonstration sensor payload.
+            updateDashboard(current);
 
-           Later we can connect this selector
-           to your Supabase transformer/sensor tables.
-        */
+        }
+    );
 
-        callAPI();
+}
 
-    }
-);
+
+const transformerRefresh =
+    document.getElementById(
+        "transformerRefresh"
+    );
+
+
+if (transformerRefresh) {
+
+    transformerRefresh.addEventListener(
+        "click",
+        () => {
+
+            renderTransformers();
+
+        }
+    );
+
+}
 
 
 /* =========================================================
    INITIAL LOAD
-   ========================================================= */
+========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        updateDashboard(demoData);
+        renderTransformers();
 
-        callAPI();
+        updateDashboard("TR-001");
 
     }
 );
