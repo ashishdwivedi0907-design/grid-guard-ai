@@ -360,8 +360,7 @@ def home():
 
     return {
 
-        "message":
-        "GridGuard AI Twin API is running"
+        FileResponse(INDEX_PATH)
 
     }
 
