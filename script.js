@@ -1,278 +1,177 @@
-// =========================================================
-// GRIDGUARD AI - DASHBOARD JAVASCRIPT
-// =========================================================
-
 document.addEventListener("DOMContentLoaded", function () {
 
-    // -----------------------------------------------------
-    // PAGE NAVIGATION
-    // -----------------------------------------------------
+    console.log("GridGuard AI started");
 
-    const navItems = document.querySelectorAll(".nav-item");
     const pages = document.querySelectorAll(".page");
+    const navItems = document.querySelectorAll(".nav-item");
 
     const pageTitle = document.getElementById("pageTitle");
     const pageSubtitle = document.getElementById("pageSubtitle");
 
-    const pageInfo = {
-
+    const pageInformation = {
         transformers: {
             title: "Transformer Overview",
             subtitle: "Real-time health status of your power network"
         },
 
         alerts: {
-            title: "Active Alerts",
-            subtitle: "Abnormal conditions detected by GridGuard AI"
+            title: "Alerts",
+            subtitle: "Monitor critical transformer conditions and warnings"
         },
 
         monitoring: {
             title: "Live Monitoring",
-            subtitle: "Real-time transformer telemetry"
+            subtitle: "Real-time transformer sensor monitoring"
         },
 
         maintenance: {
             title: "Maintenance",
-            subtitle: "Transformer maintenance and asset management"
+            subtitle: "Manage transformer maintenance activities"
         },
 
         insights: {
             title: "AI Insights",
-            subtitle: "Intelligent transformer health prediction"
+            subtitle: "AI-powered predictions and transformer health insights"
         }
-
     };
 
 
-    navItems.forEach(function (button) {
+    function showPage(pageName) {
+
+        console.log("Opening page:", pageName);
+
+        // Hide every page
+        pages.forEach(function (page) {
+            page.style.display = "none";
+            page.classList.remove("active");
+        });
+
+        // Remove active state from navigation
+        navItems.forEach(function (item) {
+            item.classList.remove("active");
+        });
+
+        // Show requested page
+        const selectedPage = document.getElementById(pageName);
+
+        if (selectedPage) {
+            selectedPage.style.display = "block";
+            selectedPage.classList.add("active");
+        }
+
+        // Activate navigation button
+        navItems.forEach(function (item) {
+
+            const target = item.getAttribute("data-page");
+
+            if (target === pageName) {
+                item.classList.add("active");
+            }
+        });
+
+        // Update heading
+        if (pageInformation[pageName]) {
+
+            if (pageTitle) {
+                pageTitle.textContent =
+                    pageInformation[pageName].title;
+            }
+
+            if (pageSubtitle) {
+                pageSubtitle.textContent =
+                    pageInformation[pageName].subtitle;
+            }
+
+            document.title =
+                "GridGuard AI | " +
+                pageInformation[pageName].title;
+        }
+    }
+
+
+    // Navigation buttons
+    navItems.forEach(function (item) {
+
+        item.addEventListener("click", function (event) {
+
+            event.preventDefault();
+
+            const pageName =
+                item.getAttribute("data-page");
+
+            if (pageName) {
+                showPage(pageName);
+            }
+        });
+
+    });
+
+
+    // Refresh buttons
+    const refreshButtons =
+        document.querySelectorAll(".refresh-btn");
+
+    refreshButtons.forEach(function (button) {
 
         button.addEventListener("click", function () {
 
-            const target = button.getAttribute("data-target");
+            console.log("Refreshing dashboard...");
 
-            if (!target) {
-                return;
-            }
-
-
-            // Remove active class from all buttons
-
-            navItems.forEach(function (item) {
-                item.classList.remove("active");
-            });
-
-
-            // Add active class to clicked button
-
-            button.classList.add("active");
-
-
-            // Hide all pages
-
-            pages.forEach(function (page) {
-                page.classList.remove("active-page");
-            });
-
-
-            // Show selected page
-
-            const selectedPage = document.getElementById(target);
-
-            if (selectedPage) {
-                selectedPage.classList.add("active-page");
-            }
-
-
-            // Update title
-
-            if (pageInfo[target]) {
-
-                if (pageTitle) {
-                    pageTitle.textContent = pageInfo[target].title;
-                }
-
-                if (pageSubtitle) {
-                    pageSubtitle.textContent = pageInfo[target].subtitle;
-                }
-
-            }
+            loadDashboardData();
 
         });
 
     });
 
 
-    // -----------------------------------------------------
-    // REFRESH BUTTON
-    // -----------------------------------------------------
+    // Dashboard API
+    async function loadDashboardData() {
 
-    const refreshButton = document.getElementById("refreshButton");
+        try {
 
-    if (refreshButton) {
+            const response =
+                await fetch("/dashboard");
 
-        refreshButton.addEventListener("click", function () {
-
-            refreshButton.textContent = "↻ Refreshing...";
-
-            setTimeout(function () {
-
-                refreshButton.textContent = "↻ Refresh";
-
-                updateMonitoringValues();
-
-            }, 1000);
-
-        });
-
-    }
-
-
-    // -----------------------------------------------------
-    // TRANSFORMER MARKERS
-    // -----------------------------------------------------
-
-    const transformerMarkers =
-        document.querySelectorAll(".transformer-marker");
-
-
-    transformerMarkers.forEach(function (marker) {
-
-        marker.addEventListener("click", function () {
-
-            const transformer =
-                marker.getAttribute("data-transformer");
-
-            if (transformer) {
-
-                alert(
-                    "GridGuard AI\n\n" +
-                    transformer +
-                    "\n\nTransformer selected.\n" +
-                    "Live health monitoring is active."
+            if (!response.ok) {
+                throw new Error(
+                    "Dashboard API error: " + response.status
                 );
-
             }
 
-        });
+            const data =
+                await response.json();
 
-    });
+            console.log("Dashboard data:", data);
 
+            updateElement(
+                "totalTransformers",
+                data.total_transformers
+            );
 
-    // -----------------------------------------------------
-    // LIVE MONITORING VALUES
-    // -----------------------------------------------------
+            updateElement(
+                "activeUnits",
+                data.active_units
+            );
 
-    function updateMonitoringValues() {
-
-        const temperature =
-            document.getElementById("temperature");
-
-        const voltage =
-            document.getElementById("voltage");
-
-        const current =
-            document.getElementById("current");
-
-        const load =
-            document.getElementById("load");
-
-        const vibration =
-            document.getElementById("vibration");
-
-        const oilTemperature =
-            document.getElementById("oilTemperature");
-
-
-        if (temperature) {
-
-            const temp =
-                Math.floor(68 + Math.random() * 8);
-
-            temperature.textContent =
-                temp + "°C";
+            updateElement(
+                "faultUnits",
+                data.fault_units
+            );
 
         }
 
+        catch (error) {
 
-        if (voltage) {
-
-            const volt =
-                (11.0 + Math.random() * 0.5)
-                .toFixed(1);
-
-            voltage.textContent =
-                volt + " kV";
-
-        }
-
-
-        if (current) {
-
-            const amp =
-                Math.floor(30 + Math.random() * 10);
-
-            current.textContent =
-                amp + " A";
-
-        }
-
-
-        if (load) {
-
-            const loadValue =
-                Math.floor(58 + Math.random() * 10);
-
-            load.textContent =
-                loadValue + "%";
-
-        }
-
-
-        if (vibration) {
-
-            const vibrationValue =
-                (2.0 + Math.random() * 0.8)
-                .toFixed(1);
-
-            vibration.textContent =
-                vibrationValue;
-
-        }
-
-
-        if (oilTemperature) {
-
-            const oil =
-                Math.floor(64 + Math.random() * 7);
-
-            oilTemperature.textContent =
-                oil + "°C";
+            console.error(
+                "Could not load dashboard data:",
+                error
+            );
 
         }
 
     }
 
 
-    // -----------------------------------------------------
-    // AUTO UPDATE LIVE MONITORING
-    // -----------------------------------------------------
+    function updateElement(id, value) {
 
-    setInterval(function () {
-
-        updateMonitoringValues();
-
-    }, 5000);
-
-
-    // -----------------------------------------------------
-    // INITIAL UPDATE
-    // -----------------------------------------------------
-
-    updateMonitoringValues();
-
-
-    console.log(
-        "GridGuard AI Dashboard loaded successfully."
-    );
-
-});
+        cons
