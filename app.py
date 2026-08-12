@@ -422,10 +422,7 @@ def predict(
 def javascript():
 
     return FileResponse(
-        os.path.join(
-            BASE_DIR,
-            "script.js"
-        ),
+        os.path.join(BASE_DIR,"static","script.js"),
         media_type="application/javascript"
     )
 
@@ -434,9 +431,6 @@ def javascript():
 def stylesheet():
 
     return FileResponse(
-        os.path.join(
-            BASE_DIR,
-            "style.css"
-        ),
+        os.path.join(BASE_DIR,"static","style.css"),
         media_type="text/css"
     )
