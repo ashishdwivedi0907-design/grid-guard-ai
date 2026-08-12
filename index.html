@@ -1,84 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>GridGuard AI | Transformer Monitoring</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>GridGuard AI | Transformer Intelligence Platform</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Sidebar -->
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
     <aside class="sidebar">
 
         <div class="logo">
-            <div class="logo-icon">G</div>
+
+            <div class="logo-icon">
+                G
+            </div>
+
             <div>
                 <h2>GridGuard</h2>
-                <span>AI MONITORING</span>
+                <span>AI POWER INTELLIGENCE</span>
             </div>
+
         </div>
 
+
         <nav>
+
             <button class="nav-item active">
-                <span>▣</span>
-                Dashboard
+                <span>⌂</span>
+                <span>Overview</span>
             </button>
 
             <button class="nav-item">
                 <span>⚡</span>
-                Transformers
-            </button>
-
-            <button class="nav-item">
-                <span>⚠</span>
-                Alerts
+                <span>Transformers</span>
             </button>
 
             <button class="nav-item">
                 <span>◉</span>
-                AI Analytics
+                <span>Live Monitoring</span>
             </button>
+
+            <button class="nav-item">
+                <span>⌖</span>
+                <span>Map View</span>
+            </button>
+
+            <button class="nav-item">
+                <span>!</span>
+                <span>Alerts</span>
+            </button>
+
+            <button class="nav-item">
+                <span>◫</span>
+                <span>Maintenance</span>
+            </button>
+
+            <button class="nav-item">
+                <span>✦</span>
+                <span>AI Insights</span>
+            </button>
+
         </nav>
 
+
         <div class="sidebar-bottom">
+
             <div class="system-status">
-                <span class="status-dot"></span>
+
+                <span class="status-dot online"></span>
+
                 <div>
                     <strong>System Online</strong>
-                    <small>Monitoring active</small>
+                    <small>GridGuard services operational</small>
                 </div>
+
             </div>
+
         </div>
 
     </aside>
 
 
-    <!-- Main Content -->
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
     <main class="main-content">
 
-        <!-- Header -->
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
         <header class="topbar">
 
             <div>
-                <p class="eyebrow">SMART GRID MONITORING</p>
-                <h1>GridGuard AI Dashboard</h1>
-                <p class="subtitle">
-                    Real-time transformer health and predictive monitoring
+
+                <p class="eyebrow">
+                    GRIDGUARD AI
                 </p>
+
+                <h1>
+                    Transformer Intelligence Platform
+                </h1>
+
+                <p class="subtitle">
+                    Monitor transformer health, sensor conditions
+                    and predictive maintenance insights.
+                </p>
+
             </div>
+
 
             <div class="header-actions">
 
                 <div class="connection">
-                    <span id="connectionDot" class="status-dot"></span>
-                    <span id="connectionText">Checking API...</span>
+
+                    <span
+                        id="connectionDot"
+                        class="status-dot"
+                    ></span>
+
+                    <span id="connectionText">
+                        Connecting...
+                    </span>
+
                 </div>
 
-                <button id="refreshBtn" class="refresh-btn">
+
+                <button
+                    class="refresh-btn"
+                    id="refreshBtn"
+                >
                     ↻ Refresh
                 </button>
 
@@ -87,70 +154,228 @@
         </header>
 
 
-        <!-- Transformer Selection -->
+
+        <!-- =================================================
+             TRANSFORMER CONTROL
+        ================================================== -->
+
         <section class="control-section">
 
             <div>
+
                 <label for="transformerSelect">
-                    Select Transformer
+                    Selected Transformer
                 </label>
 
                 <select id="transformerSelect">
-                    <option value="TR-001">TR-001 — Main Distribution</option>
-                    <option value="TR-002">TR-002 — Industrial Area</option>
-                    <option value="TR-003">TR-003 — Residential Area</option>
+
+                    <option value="TR-001">
+                        TR-001 — Main Distribution
+                    </option>
+
+                    <option value="TR-002">
+                        TR-002 — Industrial Zone
+                    </option>
+
+                    <option value="TR-003">
+                        TR-003 — Residential Sector
+                    </option>
+
                 </select>
+
             </div>
 
+
             <div class="last-updated">
+
                 Last updated:
-                <strong id="lastUpdated">--</strong>
+                <strong id="lastUpdated">
+                    --
+                </strong>
+
             </div>
 
         </section>
 
 
-        <!-- Main Health Card -->
-        <section class="health-section">
 
-            <div class="health-card">
+        <!-- =================================================
+             SYSTEM OVERVIEW
+        ================================================== -->
 
-                <div class="health-info">
+        <section class="overview-section">
 
-                    <div class="card-heading">
-                        <div>
-                            <p class="eyebrow">AI HEALTH ASSESSMENT</p>
-                            <h2 id="transformerName">TR-001</h2>
-                        </div>
 
-                        <span id="riskBadge" class="risk-badge normal">
-                            NORMAL
+            <div class="overview-card">
+
+                <div class="overview-icon blue">
+                    ⚡
+                </div>
+
+                <div>
+
+                    <p>Total Transformers</p>
+
+                    <h3 id="totalTransformers">
+                        26
+                    </h3>
+
+                    <span>
+                        Assets monitored
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <div class="overview-icon green">
+                    ✓
+                </div>
+
+                <div>
+
+                    <p>Healthy</p>
+
+                    <h3 id="healthyTransformers">
+                        18
+                    </h3>
+
+                    <span>
+                        Operating normally
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <div class="overview-icon orange">
+                    !
+                </div>
+
+                <div>
+
+                    <p>Warning</p>
+
+                    <h3 id="warningTransformers">
+                        5
+                    </h3>
+
+                    <span>
+                        Needs attention
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="overview-card">
+
+                <div class="overview-icon red">
+                    !
+                </div>
+
+                <div>
+
+                    <p>Critical</p>
+
+                    <h3 id="criticalTransformers">
+                        3
+                    </h3>
+
+                    <span>
+                        Immediate attention
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             TRANSFORMER HEALTH
+        ================================================== -->
+
+        <section class="health-card">
+
+            <div class="card-heading">
+
+                <div>
+
+                    <p class="eyebrow">
+                        AI HEALTH ASSESSMENT
+                    </p>
+
+                    <h2>
+                        Transformer Health
+                    </h2>
+
+                </div>
+
+
+                <span
+                    id="riskBadge"
+                    class="risk-badge normal"
+                >
+                    NORMAL
+                </span>
+
+            </div>
+
+
+            <div class="health-score-container">
+
+
+                <div
+                    class="health-circle"
+                    id="healthCircle"
+                >
+
+                    <div>
+
+                        <span id="healthScore">
+                            --
                         </span>
+
+                        <small>
+                            / 100
+                        </small>
+
                     </div>
 
-                    <div class="health-score-container">
+                </div>
 
-                        <div class="health-circle">
-                            <div>
-                                <span id="healthScore">--</span>
-                                <small>/100</small>
-                            </div>
-                        </div>
 
-                        <div class="health-details">
+                <div class="health-details">
 
-                            <h3>Transformer Health Score</h3>
+                    <h3 id="transformerName">
+                        TR-001
+                    </h3>
 
-                            <p id="healthMessage">
-                                Waiting for sensor data...
-                            </p>
+                    <p id="healthMessage">
+                        AI-powered transformer health assessment
+                        will appear here once sensor data is received.
+                    </p>
 
-                            <div class="confidence">
-                                <span>AI Confidence</span>
-                                <strong id="aiConfidence">--%</strong>
-                            </div>
 
-                        </div>
+                    <div class="confidence">
+
+                        <span>
+                            AI Confidence
+                        </span>
+
+                        <strong id="aiConfidence">
+                            --
+                        </strong>
 
                     </div>
 
@@ -161,178 +386,404 @@
         </section>
 
 
-        <!-- Sensor Cards -->
+
+        <!-- =================================================
+             SENSOR MONITORING
+        ================================================== -->
+
         <section>
 
             <div class="section-header">
-                <div>
-                    <p class="eyebrow">LIVE SENSOR DATA</p>
-                    <h2>Transformer Parameters</h2>
-                </div>
+
+                <p class="eyebrow">
+                    LIVE SENSOR DATA
+                </p>
+
+                <h2>
+                    Sensor Monitoring
+                </h2>
+
             </div>
 
 
             <div class="sensor-grid">
 
+
                 <!-- Temperature -->
+
                 <div class="sensor-card">
 
                     <div class="sensor-top">
-                        <div class="sensor-icon">🌡</div>
-                        <span id="temperatureStatus" class="parameter-status normal">
+
+                        <div class="sensor-icon">
+                            °C
+                        </div>
+
+                        <span
+                            id="temperatureStatus"
+                            class="parameter-status normal"
+                        >
                             NORMAL
                         </span>
+
                     </div>
 
-                    <p>Temperature</p>
+                    <p>
+                        Temperature
+                    </p>
 
                     <h3>
-                        <span id="temperature">--</span>
-                        <small>°C</small>
+                        <span id="temperature">
+                            --
+                        </span>
+
+                        <small>
+                            °C
+                        </small>
                     </h3>
 
                     <div class="progress">
-                        <div id="temperatureBar" class="progress-fill"></div>
+
+                        <div
+                            id="temperatureProgress"
+                            class="progress-fill"
+                        ></div>
+
                     </div>
 
                 </div>
 
 
-                <!-- Load -->
+
+                <!-- Oil Level -->
+
                 <div class="sensor-card">
 
                     <div class="sensor-top">
-                        <div class="sensor-icon">⚡</div>
-                        <span id="loadStatus" class="parameter-status normal">
+
+                        <div class="sensor-icon">
+                            OL
+                        </div>
+
+                        <span
+                            id="oilLevelStatus"
+                            class="parameter-status normal"
+                        >
                             NORMAL
                         </span>
+
                     </div>
 
-                    <p>Load</p>
+                    <p>
+                        Oil Level
+                    </p>
 
                     <h3>
-                        <span id="load">--</span>
-                        <small>%</small>
+                        <span id="oilLevel">
+                            --
+                        </span>
+
+                        <small>
+                            %
+                        </small>
                     </h3>
 
                     <div class="progress">
-                        <div id="loadBar" class="progress-fill"></div>
+
+                        <div
+                            id="oilLevelProgress"
+                            class="progress-fill"
+                        ></div>
+
                     </div>
 
                 </div>
 
-
-                <!-- Vibration -->
-                <div class="sensor-card">
-
-                    <div class="sensor-top">
-                        <div class="sensor-icon">〰</div>
-                        <span id="vibrationStatus" class="parameter-status normal">
-                            NORMAL
-                        </span>
-                    </div>
-
-                    <p>Vibration</p>
-
-                    <h3>
-                        <span id="vibration">--</span>
-                        <small>mm/s</small>
-                    </h3>
-
-                    <div class="progress">
-                        <div id="vibrationBar" class="progress-fill"></div>
-                    </div>
-
-                </div>
-
-
-                <!-- Oil Temperature -->
-                <div class="sensor-card">
-
-                    <div class="sensor-top">
-                        <div class="sensor-icon">◉</div>
-                        <span id="oilStatus" class="parameter-status normal">
-                            NORMAL
-                        </span>
-                    </div>
-
-                    <p>Oil Temperature</p>
-
-                    <h3>
-                        <span id="oilTemperature">--</span>
-                        <small>°C</small>
-                    </h3>
-
-                    <div class="progress">
-                        <div id="oilBar" class="progress-fill"></div>
-                    </div>
-
-                </div>
 
 
                 <!-- Voltage -->
+
                 <div class="sensor-card">
 
                     <div class="sensor-top">
-                        <div class="sensor-icon">V</div>
+
+                        <div class="sensor-icon">
+                            V
+                        </div>
+
+                        <span
+                            id="voltageStatus"
+                            class="parameter-status normal"
+                        >
+                            NORMAL
+                        </span>
+
                     </div>
 
-                    <p>Voltage</p>
+                    <p>
+                        Voltage
+                    </p>
 
                     <h3>
-                        <span id="voltage">--</span>
-                        <small>kV</small>
+
+                        <span id="voltage">
+                            --
+                        </span>
+
+                        <small>
+                            kV
+                        </small>
+
                     </h3>
 
+                    <div class="progress">
+
+                        <div
+                            id="voltageProgress"
+                            class="progress-fill"
+                        ></div>
+
+                    </div>
+
                 </div>
+
 
 
                 <!-- Current -->
+
                 <div class="sensor-card">
 
                     <div class="sensor-top">
-                        <div class="sensor-icon">A</div>
+
+                        <div class="sensor-icon">
+                            A
+                        </div>
+
+                        <span
+                            id="currentStatus"
+                            class="parameter-status normal"
+                        >
+                            NORMAL
+                        </span>
+
                     </div>
 
-                    <p>Current</p>
+                    <p>
+                        Current
+                    </p>
 
                     <h3>
-                        <span id="current">--</span>
-                        <small>A</small>
+
+                        <span id="current">
+                            --
+                        </span>
+
+                        <small>
+                            A
+                        </small>
+
                     </h3>
 
+                    <div class="progress">
+
+                        <div
+                            id="currentProgress"
+                            class="progress-fill"
+                        ></div>
+
+                    </div>
+
                 </div>
+
+
+
+                <!-- Load -->
+
+                <div class="sensor-card">
+
+                    <div class="sensor-top">
+
+                        <div class="sensor-icon">
+                            %
+                        </div>
+
+                        <span
+                            id="loadStatus"
+                            class="parameter-status normal"
+                        >
+                            NORMAL
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Load
+                    </p>
+
+                    <h3>
+
+                        <span id="load">
+                            --
+                        </span>
+
+                        <small>
+                            %
+                        </small>
+
+                    </h3>
+
+                    <div class="progress">
+
+                        <div
+                            id="loadProgress"
+                            class="progress-fill"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Vibration -->
+
+                <div class="sensor-card">
+
+                    <div class="sensor-top">
+
+                        <div class="sensor-icon">
+                            VB
+                        </div>
+
+                        <span
+                            id="vibrationStatus"
+                            class="parameter-status normal"
+                        >
+                            NORMAL
+                        </span>
+
+                    </div>
+
+                    <p>
+                        Vibration
+                    </p>
+
+                    <h3>
+
+                        <span id="vibration">
+                            --
+                        </span>
+
+                        <small>
+                            mm/s
+                        </small>
+
+                    </h3>
+
+                    <div class="progress">
+
+                        <div
+                            id="vibrationProgress"
+                            class="progress-fill"
+                        ></div>
+
+                    </div>
+
+                </div>
+
 
 
                 <!-- Humidity -->
+
                 <div class="sensor-card">
 
                     <div class="sensor-top">
-                        <div class="sensor-icon">💧</div>
+
+                        <div class="sensor-icon">
+                            H
+                        </div>
+
+                        <span
+                            id="humidityStatus"
+                            class="parameter-status normal"
+                        >
+                            NORMAL
+                        </span>
+
                     </div>
 
-                    <p>Humidity</p>
+                    <p>
+                        Humidity
+                    </p>
 
                     <h3>
-                        <span id="humidity">--</span>
-                        <small>%</small>
+
+                        <span id="humidity">
+                            --
+                        </span>
+
+                        <small>
+                            %
+                        </small>
+
                     </h3>
+
+                    <div class="progress">
+
+                        <div
+                            id="humidityProgress"
+                            class="progress-fill"
+                        ></div>
+
+                    </div>
 
                 </div>
 
 
-                <!-- AI Risk -->
-                <div class="sensor-card risk-card">
+
+                <!-- Oil Temperature -->
+
+                <div class="sensor-card">
 
                     <div class="sensor-top">
-                        <div class="sensor-icon">AI</div>
+
+                        <div class="sensor-icon">
+                            OT
+                        </div>
+
+                        <span
+                            id="oilTempStatus"
+                            class="parameter-status normal"
+                        >
+                            NORMAL
+                        </span>
+
                     </div>
 
-                    <p>AI Risk Level</p>
+                    <p>
+                        Oil Temperature
+                    </p>
 
-                    <h3 id="riskLevel">
-                        --
+                    <h3>
+
+                        <span id="oilTemp">
+                            --
+                        </span>
+
+                        <small>
+                            °C
+                        </small>
+
                     </h3>
+
+                    <div class="progress">
+
+                        <div
+                            id="oilTempProgress"
+                            class="progress-fill"
+                        ></div>
+
+                    </div>
 
                 </div>
 
@@ -341,29 +792,51 @@
         </section>
 
 
-        <!-- Alerts and Recommendation -->
+
+        <!-- =================================================
+             ALERTS + AI INSIGHTS
+        ================================================== -->
+
         <section class="bottom-grid">
 
-            <!-- Alerts -->
+
+            <!-- ALERTS -->
+
             <div class="panel">
 
                 <div class="panel-header">
-                    <div>
-                        <p class="eyebrow">MONITORING</p>
-                        <h2>Recent Alerts</h2>
-                    </div>
 
-                    <span id="alertCount" class="alert-count">
+                    <h2>
+                        System Alerts
+                    </h2>
+
+                    <span
+                        id="alertCount"
+                        class="alert-count"
+                    >
                         0
                     </span>
+
                 </div>
 
-                <div id="alertsContainer" class="alerts-container">
+
+                <div id="alertsContainer">
 
                     <div class="empty-state">
-                        <div>✓</div>
-                        <p>No alerts detected</p>
-                        <small>System is operating normally.</small>
+
+                        <div>
+                            ✓
+                        </div>
+
+                        <p>
+                            No active alerts
+                        </p>
+
+                        <small>
+                            All monitored parameters are currently
+                            within acceptable limits.
+                        </small>
+
                     </div>
 
                 </div>
@@ -371,15 +844,23 @@
             </div>
 
 
-            <!-- AI Recommendation -->
-            <div class="panel recommendation-panel">
+
+            <!-- AI INSIGHTS -->
+
+            <div class="panel">
 
                 <div class="panel-header">
-                    <div>
-                        <p class="eyebrow">AI INSIGHT</p>
-                        <h2>Recommendation</h2>
-                    </div>
+
+                    <h2>
+                        AI Insights
+                    </h2>
+
+                    <span class="preview-label">
+                        AI
+                    </span>
+
                 </div>
+
 
                 <div class="recommendation">
 
@@ -388,14 +869,16 @@
                     </div>
 
                     <div>
-                        <h3 id="recommendationTitle">
-                            Waiting for AI analysis
+
+                        <h3>
+                            Predictive Recommendation
                         </h3>
 
-                        <p id="recommendationText">
-                            Sensor information will appear here once the
-                            GridGuard AI backend responds.
+                        <p id="recommendation">
+                            AI recommendations based on transformer
+                            sensor conditions will appear here.
                         </p>
+
                     </div>
 
                 </div>
@@ -405,23 +888,149 @@
         </section>
 
 
-        <!-- Footer -->
+
+        <!-- =================================================
+             ANALYTICS PREVIEW
+        ================================================== -->
+
+        <section class="analytics-preview">
+
+            <div class="section-header analytics-heading">
+
+                <div>
+
+                    <p class="eyebrow">
+                        PERFORMANCE ANALYTICS
+                    </p>
+
+                    <h2>
+                        Transformer Trends
+                    </h2>
+
+                </div>
+
+                <span class="preview-label">
+                    ANALYTICS
+                </span>
+
+            </div>
+
+
+            <div class="analytics-placeholder">
+
+                <div class="analytics-placeholder-icon">
+                    ↗
+                </div>
+
+                <h3>
+                    Sensor analytics
+                </h3>
+
+                <p>
+                    Temperature, oil level, voltage, current,
+                    load, vibration and humidity trends will
+                    appear here.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             MAP PREVIEW
+        ================================================== -->
+
+        <section class="map-preview">
+
+            <div class="section-header analytics-heading">
+
+                <div>
+
+                    <p class="eyebrow">
+                        ASSET LOCATION
+                    </p>
+
+                    <h2>
+                        Transformer Network
+                    </h2>
+
+                </div>
+
+                <span class="preview-label">
+                    MAP VIEW
+                </span>
+
+            </div>
+
+
+            <div class="map-placeholder">
+
+                <div class="map-grid"></div>
+
+
+                <div class="map-marker marker-one">
+                    T1
+                </div>
+
+                <div class="map-marker marker-two">
+                    T2
+                </div>
+
+                <div class="map-marker marker-three">
+                    T3
+                </div>
+
+
+                <div class="map-center-content">
+
+                    <div class="map-icon">
+                        ⌖
+                    </div>
+
+                    <h3>
+                        Transformer Network Map
+                    </h3>
+
+                    <p>
+                        Geographic transformer monitoring
+                        will be available in the next stage.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
         <footer>
 
-            <p>
-                GridGuard AI • Smart Transformer Monitoring Platform
-            </p>
+            <span>
+                GridGuard AI © 2026
+            </span>
 
-            <p>
-                AI-powered predictive maintenance
-            </p>
+            <span>
+                Smart Power Distribution Monitoring
+            </span>
 
         </footer>
 
     </main>
 
 
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
     <script src="script.js"></script>
 
 </body>
+
 </html>
