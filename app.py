@@ -19,7 +19,7 @@ app = FastAPI(
 # =========================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-app.mount("/static",StaticFiles(directory=os.path.join(Base.DIR,"static")),name="static")
+app.mount("/static",StaticFiles(directory=os.path.join(Base_DIR,"static")),name="static")
 
           
 
