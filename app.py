@@ -362,11 +362,7 @@ def get_complete_ai_result(
 @app.get("/")
 def home():
 
-    return {
-
-        FileResponse(INDEX_PATH)
-
-    }
+    return FileResponse(INDEX_PATH)
 
 
 # =========================================================
