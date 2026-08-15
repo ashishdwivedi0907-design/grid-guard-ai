@@ -1,11 +1,12 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 import joblib
 import pandas as pd
-import os
+
 
 
 app = FastAPI(
@@ -19,6 +20,9 @@ app = FastAPI(
 # =========================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app.mount("/static",StaticFiles(directory=os.path.join(Base.DIR,"static")),name="static")
+templates= Jinja2Templates(directory=os.path.join(BASE_DIR,"templates"))
+          
 
 
 MODEL_PATH = os.path.join(
