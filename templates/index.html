@@ -19,89 +19,50 @@
     <aside class="sidebar">
 
         <div class="brand">
-
             <div class="brand-logo">⚡</div>
-
             <div class="brand-text">
                 <h2>GridGuard</h2>
                 <span>AI Twin Platform</span>
             </div>
-
         </div>
-
 
         <nav class="navigation" aria-label="Dashboard navigation">
 
-            <button
-                class="nav-item active"
-                data-target="transformers"
-                type="button">
-
+            <button class="nav-item active" data-target="transformers" type="button">
                 <span class="nav-icon">▣</span>
                 <span>Transformers</span>
-
             </button>
 
-
-            <button
-                class="nav-item"
-                data-target="alerts"
-                type="button">
-
+            <button class="nav-item" data-target="alerts" type="button">
                 <span class="nav-icon">⚠</span>
                 <span>Alerts</span>
-
             </button>
 
-
-            <button
-                class="nav-item"
-                data-target="monitoring"
-                type="button">
-
+            <button class="nav-item" data-target="monitoring" type="button">
                 <span class="nav-icon">◉</span>
                 <span>Live Monitoring</span>
-
             </button>
 
-
-            <button
-                class="nav-item"
-                data-target="maintenance"
-                type="button">
-
+            <button class="nav-item" data-target="maintenance" type="button">
                 <span class="nav-icon">🔧</span>
                 <span>Maintenance</span>
-
             </button>
 
-
-            <button
-                class="nav-item"
-                data-target="insights"
-                type="button">
-
+            <button class="nav-item" data-target="insights" type="button">
                 <span class="nav-icon">✦</span>
                 <span>AI Insights</span>
-
             </button>
 
         </nav>
 
-
         <div class="sidebar-footer">
-
             <div class="connection">
-
-                <span class="online-dot"></span>
-
+                <span class="online-dot" id="connectionDot"></span>
                 <div>
-                    <strong>System Online</strong>
-                    <small>AI Twin Connected</small>
+                    <strong id="connectionLabel">System Online</strong>
+                    <small id="connectionSub">AI Twin Connected</small>
                 </div>
-
             </div>
-
         </div>
 
     </aside>
@@ -112,34 +73,17 @@
     <main class="main">
 
         <!-- TOPBAR -->
-
         <header class="topbar">
-
             <div>
-
-                <div class="eyebrow">
-                    GRIDGUARD AI
-                </div>
-
-                <h1 id="pageTitle">
-                    Transformer Overview
-                </h1>
-
-                <p id="pageSubtitle">
-                    Real-time health status of your power network
-                </p>
-
+                <div class="eyebrow">GRIDGUARD AI</div>
+                <h1 id="pageTitle">Transformer Overview</h1>
+                <p id="pageSubtitle">Real-time health status of your power network</p>
             </div>
-
 
             <div class="top-status">
-
                 <span class="online-dot"></span>
-
-                <span>Live System</span>
-
+                <span id="topStatusLabel">Live System</span>
             </div>
-
         </header>
 
 
@@ -147,107 +91,103 @@
              TRANSFORMERS
         ================================================== -->
 
-        <section
-            id="transformers"
-            class="page active-page">
+        <section id="transformers" class="page active-page">
 
-            <div class="section-label">
-                GRID ASSETS
-            </div>
-
+            <div class="section-label">GRID ASSETS</div>
 
             <div class="stats">
 
                 <div class="stat-card blue">
-
                     <span>Total Transformers</span>
-
-                    <strong id="totalTransformers">
-                        24
-                    </strong>
-
-                    <small>
-                        Monitored assets
-                    </small>
-
+                    <strong id="totalTransformers">--</strong>
+                    <small>Monitored assets</small>
                 </div>
-
 
                 <div class="stat-card green">
-
                     <span>Healthy</span>
-
-                    <strong id="healthyTransformers">
-                        18
-                    </strong>
-
-                    <small>
-                        75% of network
-                    </small>
-
+                    <strong id="healthyTransformers">--</strong>
+                    <small>Normal status</small>
                 </div>
-
 
                 <div class="stat-card orange">
-
                     <span>Warning</span>
-
-                    <strong id="warningTransformers">
-                        4
-                    </strong>
-
-                    <small>
-                        Needs attention
-                    </small>
-
+                    <strong id="warningTransformers">--</strong>
+                    <small>Needs attention</small>
                 </div>
 
-
                 <div class="stat-card red">
-
                     <span>Critical</span>
-
-                    <strong id="criticalTransformers">
-                        2
-                    </strong>
-
-                    <small>
-                        Immediate inspection
-                    </small>
-
+                    <strong id="criticalTransformers">--</strong>
+                    <small>Immediate inspection</small>
                 </div>
 
             </div>
 
+            <div class="panel" style="margin-bottom:20px;">
+                <div class="panel-header">
+                    <div>
+                        <h2>Network Health Score</h2>
+                        <p>Weighted average across all monitored transformers</p>
+                    </div>
+                </div>
+                <div class="health-score" style="margin-top:0;">
+                    <div class="score-row">
+                        <strong id="networkHealthScore">--</strong>
+                        <small>/ 100</small>
+                    </div>
+                    <div class="score-bar">
+                        <div class="score-progress" id="networkHealthBar" style="width:0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;">
+                <div class="panel-header">
+                    <div>
+                        <h2>Selected Transformer</h2>
+                        <p id="selectedTransformerUpdated">Updated just now</p>
+                    </div>
+                    <span class="badge" id="selectedTransformerStatus">--</span>
+                </div>
+
+                <div class="ai-cards">
+                    <div>
+                        <span>Transformer ID</span>
+                        <strong id="selectedTransformerId">--</strong>
+                    </div>
+                    <div>
+                        <span>Location</span>
+                        <strong id="selectedTransformerLocation">--</strong>
+                    </div>
+                    <div>
+                        <span>Health Score</span>
+                        <strong id="selectedTransformerHealth">--</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-bottom:20px;">
+                <div class="panel-header">
+                    <div>
+                        <h2>Transformer List</h2>
+                        <p>Select a transformer to update the entire dashboard</p>
+                    </div>
+                </div>
+
+                <div class="transformer-list" id="transformerList">
+                    <!-- populated by script.js -->
+                </div>
+            </div>
 
             <div class="panel">
 
                 <div class="panel-header">
-
                     <div>
-
-                        <h2>
-                            Transformer Network
-                        </h2>
-
-                        <p>
-                            Live transformer locations and health status
-                        </p>
-
+                        <h2>Transformer Network</h2>
+                        <p>Live transformer locations and health status</p>
                     </div>
-
-
-                    <button
-                        class="action-button"
-                        id="refreshButton"
-                        type="button">
-
-                        ↻ Refresh
-
-                    </button>
-
+                    <button class="action-button" id="refreshButton" type="button">↻ Refresh</button>
                 </div>
-
 
                 <div class="map">
 
@@ -257,87 +197,38 @@
                     <div class="connection-line line-b"></div>
                     <div class="connection-line line-c"></div>
 
-
                     <div class="map-center">
-
-                        <div class="map-pulse">
-                            ⚡
-                        </div>
-
-                        <h3>
-                            Grid Network
-                        </h3>
-
-                        <p>
-                            Live transformer network
-                        </p>
-
+                        <div class="map-pulse">⚡</div>
+                        <h3>Grid Network</h3>
+                        <p>Live transformer network</p>
                     </div>
 
-
-                    <button
-                        class="transformer-marker healthy-marker marker-1"
-                        data-transformer="T-101"
-                        type="button">
-
-                        <span class="marker-dot"></span>
-                        T-101
-
+                    <button class="transformer-marker healthy-marker marker-1" data-transformer="TR001" type="button">
+                        <span class="marker-dot"></span>TR001
                     </button>
 
-
-                    <button
-                        class="transformer-marker critical-marker marker-2"
-                        data-transformer="T-102"
-                        type="button">
-
-                        <span class="marker-dot"></span>
-                        T-102
-
+                    <button class="transformer-marker critical-marker marker-2" data-transformer="TR002" type="button">
+                        <span class="marker-dot"></span>TR002
                     </button>
 
-
-                    <button
-                        class="transformer-marker healthy-marker marker-3"
-                        data-transformer="T-103"
-                        type="button">
-
-                        <span class="marker-dot"></span>
-                        T-103
-
+                    <button class="transformer-marker healthy-marker marker-3" data-transformer="TR003" type="button">
+                        <span class="marker-dot"></span>TR003
                     </button>
 
+                    <button class="transformer-marker warning-marker marker-4" data-transformer="TR004" type="button">
+                        <span class="marker-dot"></span>TR004
+                    </button>
 
-                    <button
-                        class="transformer-marker warning-marker marker-4"
-                        data-transformer="T-104"
-                        type="button">
-
-                        <span class="marker-dot"></span>
-                        T-104
-
+                    <button class="transformer-marker warning-marker marker-5" data-transformer="TR005" type="button">
+                        <span class="marker-dot"></span>TR005
                     </button>
 
                 </div>
 
-
                 <div class="map-legend">
-
-                    <span>
-                        <i class="legend-dot healthy"></i>
-                        Healthy
-                    </span>
-
-                    <span>
-                        <i class="legend-dot warning"></i>
-                        Warning
-                    </span>
-
-                    <span>
-                        <i class="legend-dot critical"></i>
-                        Critical
-                    </span>
-
+                    <span><i class="legend-dot healthy"></i>Healthy</span>
+                    <span><i class="legend-dot warning"></i>Warning</span>
+                    <span><i class="legend-dot critical"></i>Critical</span>
                 </div>
 
             </div>
@@ -349,138 +240,46 @@
              ALERTS
         ================================================== -->
 
-        <section
-            id="alerts"
-            class="page">
+        <section id="alerts" class="page">
 
-            <div class="section-label">
-                ALERT CENTER
-            </div>
-
+            <div class="section-label">ALERT CENTER</div>
 
             <div class="panel">
 
                 <div class="panel-header">
-
                     <div>
-
-                        <h2>
-                            Active Alerts
-                        </h2>
-
-                        <p>
-                            Abnormal conditions detected by GridGuard AI
-                        </p>
-
+                        <h2>Active Alerts</h2>
+                        <p>Abnormal conditions detected by GridGuard AI</p>
                     </div>
-
-
-                    <span class="badge danger-badge">
-                        2 Active
-                    </span>
-
+                    <span class="badge danger-badge" id="activeAlertsBadge">0 Active</span>
                 </div>
 
+                <div class="alert-filters">
+                    <button class="alert-filter-btn active" data-filter="all" type="button">All</button>
+                    <button class="alert-filter-btn" data-filter="critical" type="button">Critical</button>
+                    <button class="alert-filter-btn" data-filter="warning" type="button">Warning</button>
+                    <button class="alert-filter-btn" data-filter="resolved" type="button">Resolved</button>
+                </div>
 
-                <div class="alert-list">
-
-
-                    <div class="alert critical">
-
-                        <div class="alert-icon">
-                            !
-                        </div>
-
-                        <div class="alert-content">
-
-                            <strong>
-                                Transformer T-102
-                            </strong>
-
-                            <p>
-                                Critical temperature and load detected.
-                            </p>
-
-                        </div>
-
-                        <span>
-                            2 min ago
-                        </span>
-
-                    </div>
-
-
-                    <div class="alert warning">
-
-                        <div class="alert-icon">
-                            !
-                        </div>
-
-                        <div class="alert-content">
-
-                            <strong>
-                                Transformer T-104
-                            </strong>
-
-                            <p>
-                                Abnormal vibration detected.
-                            </p>
-
-                        </div>
-
-                        <span>
-                            8 min ago
-                        </span>
-
-                    </div>
-
-
-                    <div class="alert normal">
-
-                        <div class="alert-icon">
-                            ✓
-                        </div>
-
-                        <div class="alert-content">
-
-                            <strong>
-                                Transformer T-101
-                            </strong>
-
-                            <p>
-                                Operating within normal parameters.
-                            </p>
-
-                        </div>
-
-                        <span>
-                            12 min ago
-                        </span>
-
-                    </div>
-
+                <div class="alert-list" id="alertListContainer">
+                    <!-- populated by script.js -->
                 </div>
 
             </div>
 
-
             <div class="alert-summary">
-
                 <div>
                     <span>Critical</span>
-                    <strong>1</strong>
+                    <strong id="alertSummaryCritical">0</strong>
                 </div>
-
                 <div>
                     <span>Warning</span>
-                    <strong>1</strong>
+                    <strong id="alertSummaryWarning">0</strong>
                 </div>
-
                 <div>
                     <span>Resolved</span>
-                    <strong>12</strong>
+                    <strong id="alertSummaryResolved">0</strong>
                 </div>
-
             </div>
 
         </section>
@@ -490,156 +289,68 @@
              LIVE MONITORING
         ================================================== -->
 
-        <section
-            id="monitoring"
-            class="page">
+        <section id="monitoring" class="page">
 
-            <div class="section-label">
-                REAL-TIME TELEMETRY
-            </div>
-
+            <div class="section-label">REAL-TIME TELEMETRY</div>
 
             <div class="monitor-grid">
 
-
                 <div class="sensor-card">
-
-                    <span>
-                        Temperature
-                    </span>
-
-                    <strong id="temperature">
-                        72°C
-                    </strong>
-
-                    <small class="normal-text">
-                        ● Normal
-                    </small>
-
+                    <span>Temperature</span>
+                    <strong id="temperature">-- °C</strong>
+                    <small id="temperatureStatus" class="normal-text">● Normal</small>
+                    <canvas class="sensor-spark" id="chart-temperature"></canvas>
                 </div>
 
-
                 <div class="sensor-card">
-
-                    <span>
-                        Voltage
-                    </span>
-
-                    <strong id="voltage">
-                        11.2 kV
-                    </strong>
-
-                    <small class="normal-text">
-                        ● Stable
-                    </small>
-
+                    <span>Voltage</span>
+                    <strong id="voltage">-- kV</strong>
+                    <small id="voltageStatus" class="normal-text">● Stable</small>
+                    <canvas class="sensor-spark" id="chart-voltage"></canvas>
                 </div>
 
-
                 <div class="sensor-card">
-
-                    <span>
-                        Current
-                    </span>
-
-                    <strong id="current">
-                        34 A
-                    </strong>
-
-                    <small class="normal-text">
-                        ● Normal load
-                    </small>
-
+                    <span>Current</span>
+                    <strong id="current">-- A</strong>
+                    <small id="currentStatus" class="normal-text">● Normal load</small>
+                    <canvas class="sensor-spark" id="chart-current"></canvas>
                 </div>
 
-
                 <div class="sensor-card">
-
-                    <span>
-                        Load
-                    </span>
-
-                    <strong id="load">
-                        62%
-                    </strong>
-
-                    <small class="normal-text">
-                        ● Safe
-                    </small>
-
+                    <span>Load</span>
+                    <strong id="load">-- %</strong>
+                    <small id="loadStatus" class="normal-text">● Safe</small>
+                    <canvas class="sensor-spark" id="chart-load"></canvas>
                 </div>
 
-
                 <div class="sensor-card">
-
-                    <span>
-                        Vibration
-                    </span>
-
-                    <strong id="vibration">
-                        2.4
-                    </strong>
-
-                    <small class="normal-text">
-                        ● Normal
-                    </small>
-
+                    <span>Vibration</span>
+                    <strong id="vibration">--</strong>
+                    <small id="vibrationStatus" class="normal-text">● Normal</small>
+                    <canvas class="sensor-spark" id="chart-vibration"></canvas>
                 </div>
 
-
                 <div class="sensor-card">
-
-                    <span>
-                        Oil Temperature
-                    </span>
-
-                    <strong id="oilTemperature">
-                        68°C
-                    </strong>
-
-                    <small class="normal-text">
-                        ● Normal
-                    </small>
-
+                    <span>Oil Temperature</span>
+                    <strong id="oilTemperature">-- °C</strong>
+                    <small id="oilTemperatureStatus" class="normal-text">● Normal</small>
+                    <canvas class="sensor-spark" id="chart-oilTemperature"></canvas>
                 </div>
 
             </div>
 
-
             <div class="panel monitoring-panel">
-
                 <div class="panel-header">
-
                     <div>
-
-                        <h2>
-                            Live Sensor Stream
-                        </h2>
-
-                        <p>
-                            Real-time transformer telemetry
-                        </p>
-
+                        <h2>Live Sensor Stream</h2>
+                        <p>Real-time transformer telemetry — updates every few seconds</p>
                     </div>
-
-
-                    <span class="live-badge">
-                        ● LIVE
-                    </span>
-
+                    <span class="live-badge">● LIVE</span>
                 </div>
-
-
-                <div class="chart">
-
-                    <div class="chart-line"></div>
-
-                    <div class="chart-text">
-                        LIVE TELEMETRY
-                    </div>
-
-                </div>
-
+                <p style="color:#64748b; font-size:11px;">
+                    Each sensor card above shows its own live trend line. Values simulate small
+                    real-time fluctuations around the selected transformer's current readings.
+                </p>
             </div>
 
         </section>
@@ -649,118 +360,22 @@
              MAINTENANCE
         ================================================== -->
 
-        <section
-            id="maintenance"
-            class="page">
+        <section id="maintenance" class="page">
 
-            <div class="section-label">
-                ASSET MANAGEMENT
-            </div>
-
+            <div class="section-label">ASSET MANAGEMENT</div>
 
             <div class="panel">
-
                 <div class="panel-header">
-
                     <div>
-
-                        <h2>
-                            Maintenance Schedule
-                        </h2>
-
-                        <p>
-                            Upcoming transformer maintenance
-                        </p>
-
+                        <h2>Maintenance Schedule</h2>
+                        <p>Upcoming transformer maintenance</p>
                     </div>
-
-
-                    <span class="badge">
-                        3 Scheduled
-                    </span>
-
+                    <span class="badge">Scheduled</span>
                 </div>
 
-
-                <div class="maintenance-list">
-
-
-                    <div class="maintenance">
-
-                        <div class="maintenance-icon">
-                            🔧
-                        </div>
-
-                        <div class="maintenance-info">
-
-                            <strong>
-                                Transformer T-101
-                            </strong>
-
-                            <p>
-                                Routine inspection
-                            </p>
-
-                        </div>
-
-                        <span>
-                            18 Aug 2026
-                        </span>
-
-                    </div>
-
-
-                    <div class="maintenance">
-
-                        <div class="maintenance-icon">
-                            🛠
-                        </div>
-
-                        <div class="maintenance-info">
-
-                            <strong>
-                                Transformer T-106
-                            </strong>
-
-                            <p>
-                                Oil quality inspection
-                            </p>
-
-                        </div>
-
-                        <span>
-                            22 Aug 2026
-                        </span>
-
-                    </div>
-
-
-                    <div class="maintenance">
-
-                        <div class="maintenance-icon">
-                            🔧
-                        </div>
-
-                        <div class="maintenance-info">
-
-                            <strong>
-                                Transformer T-112
-                            </strong>
-
-                            <p>
-                                Thermal inspection
-                            </p>
-
-                        </div>
-
-                        <span>
-                            27 Aug 2026
-                        </span>
-
-                    </div>
-
+                <div class="maintenance-list" id="maintenanceListContainer">
+                    <!-- populated by script.js -->
                 </div>
-
             </div>
 
         </section>
@@ -770,129 +385,70 @@
              AI INSIGHTS
         ================================================== -->
 
-        <section
-            id="insights"
-            class="page">
+        <section id="insights" class="page">
 
-            <div class="section-label">
-                ARTIFICIAL INTELLIGENCE
-            </div>
-
+            <div class="section-label">ARTIFICIAL INTELLIGENCE</div>
 
             <div class="ai-panel">
 
                 <div class="ai-header">
-
-                    <div class="ai-logo">
-                        ✦
-                    </div>
-
+                    <div class="ai-logo">✦</div>
                     <div>
-
-                        <h2>
-                            GridGuard AI Twin
-                        </h2>
-
-                        <p>
-                            Intelligent transformer health prediction
-                        </p>
-
+                        <h2>GridGuard AI Twin — <span id="aiTransformerId">--</span></h2>
+                        <p>Intelligent transformer health prediction</p>
                     </div>
-
                 </div>
-
 
                 <div class="health-score">
-
-                    <span>
-                        Network Health Score
-                    </span>
-
-
+                    <span>AI Twin Health Score</span>
                     <div class="score-row">
-
-                        <strong>
-                            86.4
-                        </strong>
-
-                        <small>
-                            / 100
-                        </small>
-
+                        <strong id="aiHealthScore">--</strong>
+                        <small>/ 100</small>
                     </div>
-
-
                     <div class="score-bar">
-
-                        <div class="score-progress"></div>
-
+                        <div class="score-progress" id="aiHealthBar" style="width:0%;"></div>
                     </div>
-
                 </div>
-
 
                 <div class="ai-recommendation">
-
-                    <span>
-                        AI RECOMMENDATION
-                    </span>
-
-                    <h3>
-                        Transformer T-102 requires inspection
-                    </h3>
-
-                    <p>
-                        Elevated temperature and load conditions
-                        indicate increased operational risk.
-                        GridGuard recommends inspection and
-                        continued monitoring.
-                    </p>
-
+                    <span>AI RECOMMENDATION</span>
+                    <h3 id="aiTransformerHeadline">AI Recommendation</h3>
+                    <p id="aiRecommendationText">--</p>
                 </div>
 
+                <div class="ai-recommendation" style="border-left-color:#38bdf8; background: rgba(56,189,248,.06); margin-top:14px;">
+                    <span style="color:#7dd3fc;">AI PREDICTION</span>
+                    <p id="aiPredictionText" style="margin-top:8px;">--</p>
+                </div>
 
                 <div class="ai-cards">
 
                     <div>
-
-                        <span>
-                            AI Confidence
-                        </span>
-
-                        <strong>
-                            94%
-                        </strong>
-
+                        <span>AI Confidence</span>
+                        <strong id="aiConfidence">--</strong>
                     </div>
-
 
                     <div>
-
-                        <span>
-                            Risk Level
-                        </span>
-
-                        <strong class="risk-high">
-                            HIGH
-                        </strong>
-
+                        <span>Risk Level</span>
+                        <strong class="risk-normal" id="aiRiskLevel">--</strong>
                     </div>
-
 
                     <div>
-
-                        <span>
-                            Prediction
-                        </span>
-
-                        <strong>
-                            24h
-                        </strong>
-
+                        <span>Contributing Factors</span>
+                        <div class="factor-list" id="aiFactors"></div>
                     </div>
-                    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
